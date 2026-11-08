@@ -1,0 +1,457 @@
+const fs = require('fs');
+const path = require('path');
+const si = require('simple-icons');
+
+const OUT = process.argv[2] || path.join(__dirname, 'assets');
+fs.mkdirSync(OUT, { recursive: true });
+
+const SANS = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif";
+const MONO = "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace";
+
+const THEMES = {
+  light: {
+    name: 'light', ink: '#1f2328', body: '#3d444d', muted: '#59636e', faint: '#818b98',
+    line: '#d8dee4', chipBg: '#f6f8fa', chipLine: '#e1e6eb',
+    edu: '#4f5bd5', exp: '#0f7b6c', node: '#ffffff',
+    icon: { OpenTelemetry: '#425cc7', Gerrit: '#59636e', LangGraph: '#1c3c3c', LangChain: '#1c3c3c' },
+  },
+  dark: {
+    name: 'dark', ink: '#f0f6fc', body: '#c9d1d9', muted: '#9198a1', faint: '#6e7681',
+    line: '#30363d', chipBg: '#161b22', chipLine: '#262c34',
+    edu: '#9aa5ff', exp: '#3fcfb0', node: '#0d1117',
+    icon: {
+      OpenTelemetry: '#f5a800', YOLO11: '#8fa4ff', Keras: '#ff5c5c', Python: '#6e9fd8', PostgreSQL: '#7b9ce8',
+      pgvector: '#7b9ce8', OpenCV: '#8f7bff', Django: '#44b78b', 'C++': '#659ad2', Gerrit: '#c9d1d9',
+    },
+  },
+};
+
+const AZURE_DEVOPS = { hex: '0078D7', path: 'M0 8.877L2.247 5.91l8.405-3.416V.022l7.37 5.393L2.966 8.338v8.225L0 15.707zm24-4.45v14.651l-5.753 4.9-9.303-3.057v3.056l-5.978-7.416 15.057 1.798V5.415z' };
+
+// Tools get their brand mark; `null` marks a tool without a recognizable icon. Anything absent is a concept.
+const TECH = {
+  Keras: si.siKeras, TensorFlow: si.siTensorflow, YOLO11: si.siUltralytics, OpenCV: si.siOpencv,
+  'scikit-learn': si.siScikitlearn, BERT: null, LangGraph: si.siLanggraph, LangChain: si.siLangchain,
+  MCP: si.siModelcontextprotocol, FAISS: null, pgvector: si.siPostgresql, Python: si.siPython,
+  FastAPI: si.siFastapi, PostgreSQL: si.siPostgresql, Redis: si.siRedis, Django: si.siDjango,
+  'Arize Phoenix': null, OpenTelemetry: si.siOpentelemetry, Pydantic: si.siPydantic,
+  SQLAlchemy: si.siSqlalchemy, pytest: si.siPytest, Git: si.siGit, Gerrit: si.siGerrit,
+  'Azure DevOps': AZURE_DEVOPS, Jenkins: si.siJenkins, Docker: si.siDocker,
+  OpenShift: si.siRedhatopenshift, Java: si.siOpenjdk, 'C++': si.siCplusplus,
+};
+
+const EDUCATION = {
+  key: 'edu', title: 'Education', span: '2021 – 2027',
+  orgs: [
+    {
+      name: 'University of Zagreb', sub: 'Faculty of Electrical Engineering and Computing',
+      roles: [
+        {
+          date: 'October 2025 – July 2027', note: 'expected', title: 'MSc in Computing', aside: 'Computer Science track',
+          groups: [{ label: 'Relevant coursework', items: ['Machine Learning', 'Deep Learning'] }],
+        },
+        {
+          date: 'October 2021 – July 2025', title: 'BSc in Computing',
+          groups: [
+            { label: 'Bachelor’s thesis', items: ['Facial expression classification'] },
+            { label: 'Deep learning', items: ['CNN', 'Keras', 'TensorFlow'] },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Université de Tours', alt: 'Polytech Tours',
+      roles: [
+        {
+          date: 'September 2025 – January 2026', title: 'Erasmus+ exchange semester',
+          groups: [
+            { label: 'Computer vision', items: ['Instance segmentation', 'YOLO11', 'OpenCV'] },
+            { label: 'Natural language processing', items: ['TF-IDF', 'SVM', 'BERT', 'scikit-learn'] },
+            { label: 'Data and evaluation', items: ['Dataset preparation', 'Cross-validation', 'Model comparison'] },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+const EXPERIENCE = {
+  key: 'exp', title: 'Experience', span: '2025 – present',
+  orgs: [
+    {
+      name: 'Abysalto',
+      roles: [
+        {
+          date: 'January 2026 – present', live: true, title: 'Student AI/ML Engineer',
+          context: 'Production support chatbot and supplier catalog imports.',
+          metric: { pre: 'Nearly ', strong: '30,000', post: ' production sessions' },
+          groups: [
+            { label: 'Agentic AI', items: ['LangGraph', 'ReAct', 'Tool calling', 'LLMs'] },
+            { label: 'Document retrieval', items: ['RAG', 'Chunking', 'Embeddings', 'FAISS', 'pgvector'] },
+            { label: 'Backend and data', items: ['Python', 'FastAPI', 'REST APIs', 'PostgreSQL', 'Redis', 'Django'] },
+            { label: 'Evaluation and tracing', items: ['Arize Phoenix', 'OpenTelemetry', 'Prompt evaluation'] },
+          ],
+        },
+        {
+          date: 'July – September 2025', title: 'AI Engineering Intern', aside: 'Abysalto AI Academy',
+          context: 'Agent Studio: agent configuration and document search.',
+          groups: [
+            { label: 'Agent integration', items: ['LangGraph', 'LangChain', 'RAG', 'MCP'] },
+            { label: 'API development', items: ['FastAPI', 'Pydantic', 'SQLAlchemy', 'PostgreSQL', 'pytest'] },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+const SHARED = {
+  title: 'Shared engineering tools',
+  groups: [
+    { label: 'Delivery and collaboration', items: ['Git', 'Gerrit', 'Azure DevOps', 'Jenkins'] },
+    { label: 'Runtime and deployment', items: ['Docker', 'OpenShift'] },
+    { label: 'Other programming experience', items: ['Java', 'C++'] },
+  ],
+};
+
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const BODY_SIZE = 13.5;
+const ITEM_SIZE = 11.5;
+const MONO_W = 0.6;
+const sansW = (s, size) => s.length * size * 0.52;
+
+function luminance(hex) {
+  const [r, g, b] = [0, 2, 4].map((i) => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function iconColor(name, icon, t) {
+  if (t.icon[name]) return t.icon[name];
+  const L = luminance(icon.hex);
+  if (t.name === 'light' && L > 0.7) return t.muted;
+  if (t.name === 'dark' && L < 0.06) return t.body;
+  return '#' + icon.hex;
+}
+
+function itemWidth(name) {
+  return (TECH[name] ? 17 : 0) + name.length * ITEM_SIZE * MONO_W;
+}
+
+// Flows a category's items onto rows, separated by quiet middots; brand marks only for real tools.
+function items(list, x, y, width, t) {
+  const SEP = 15;
+  let cx = x, row = 0, svg = '';
+  list.forEach((name, i) => {
+    const w = itemWidth(name);
+    if (i && cx + SEP + w > x + width) { cx = x; row++; }
+    else if (i) {
+      svg += `<circle cx="${(cx + SEP / 2).toFixed(1)}" cy="${y + row * 20 - 4}" r="1.1" fill="${t.faint}"/>`;
+      cx += SEP;
+    }
+    const by = y + row * 20;
+    const icon = TECH[name];
+    let tx = cx;
+    if (icon) {
+      svg += `<path transform="translate(${cx.toFixed(1)},${by - 10.5}) scale(.5)" fill="${iconColor(name, icon, t)}" d="${icon.path}"/>`;
+      tx += 17;
+    }
+    const isTool = name in TECH;
+    svg += `<text x="${tx.toFixed(1)}" y="${by}" font-family="${MONO}" font-size="${ITEM_SIZE}" fill="${isTool ? t.body : t.muted}">${esc(name)}</text>`;
+    cx += w;
+  });
+  return { svg, h: row * 20 + 14 };
+}
+
+function group(g, x, y, width, t) {
+  let svg = `<text x="${x}" y="${y}" font-family="${SANS}" font-size="12" font-weight="600" fill="${t.ink}">${esc(g.label)}</text>`;
+  const row = items(g.items, x, y + 20, width, t);
+  return { svg: svg + row.svg, h: 20 + row.h };
+}
+
+function groups(list, x, y, width, t) {
+  let svg = '', cy = y;
+  list.forEach((g, i) => {
+    if (i) cy += 14;
+    const out = group(g, x, cy, width, t);
+    svg += out.svg;
+    cy += out.h;
+  });
+  return { svg, h: cy - y };
+}
+
+function titleLine(title, aside, x, y, width, size, weight, t) {
+  const open = `<text x="${x}" y="${y}" font-family="${SANS}" font-size="${size}" font-weight="${weight}" fill="${t.ink}" letter-spacing="-.1">`;
+  if (!aside) return { svg: `${open}${esc(title)}</text>`, h: 0 };
+  if (sansW(title, size) + sansW(' · ' + aside, size - 1) <= width) {
+    return { svg: `${open}${esc(title)}<tspan font-weight="400" font-size="${size - 1}" fill="${t.muted}"> · ${esc(aside)}</tspan></text>`, h: 0 };
+  }
+  return {
+    svg: `${open}${esc(title)}</text><text x="${x}" y="${y + 20}" font-family="${SANS}" font-size="${size - 2}" fill="${t.muted}">${esc(aside)}</text>`,
+    h: 20,
+  };
+}
+
+function metric(m, x, y, accent, t) {
+  const text = m.pre + m.strong + m.post;
+  const w = 26 + text.length * 11 * MONO_W + 12;
+  const px = x + 16;
+  let svg = `<path d="M${x + 4} ${y - 9}v9a3 3 0 0 0 3 3h${px - x - 7}" fill="none" stroke="${t.line}" stroke-width="1.2"/>`;
+  svg += `<rect x="${px}" y="${y - 7}" width="${w.toFixed(1)}" height="20" rx="10" fill="${accent}" fill-opacity=".08" stroke="${accent}" stroke-opacity=".35"/>`;
+  svg += `<g transform="translate(${px + 10},${y - 2})" fill="${accent}"><rect x="0" y="6" width="2" height="4" rx=".6"/><rect x="3.5" y="3" width="2" height="7" rx=".6"/><rect x="7" y="0" width="2" height="10" rx=".6"/></g>`;
+  svg += `<text x="${px + 26}" y="${y + 7}" font-family="${MONO}" font-size="11" fill="${t.body}">${esc(m.pre)}<tspan font-weight="700" fill="${t.ink}">${esc(m.strong)}</tspan>${esc(m.post)}</text>`;
+  return svg;
+}
+
+function role(r, x, y, width, accent, t) {
+  let svg = '';
+  const DATE_SIZE = 11.5, LS = 0.2;
+  const dateW = r.date.length * (DATE_SIZE * MONO_W + LS);
+  svg += `<text x="${x}" y="${y + 10}" font-family="${MONO}" font-size="${DATE_SIZE}" letter-spacing="${LS}" fill="${accent}" font-weight="600">${esc(r.date)}</text>`;
+  let dateEnd = x + dateW;
+  if (r.note) {
+    const nx = x + dateW + 7;
+    const nw = r.note.length * 6 + 14;
+    svg += `<rect x="${nx.toFixed(1)}" y="${y - 1}" width="${nw}" height="15" rx="7.5" fill="none" stroke="${t.line}"/>`;
+    svg += `<text x="${(nx + nw / 2).toFixed(1)}" y="${y + 9.5}" text-anchor="middle" font-family="${MONO}" font-size="10" fill="${t.muted}">${esc(r.note)}</text>`;
+    dateEnd = nx + nw;
+  }
+  if (r.live) {
+    const lx = (x + dateW + 9).toFixed(1);
+    svg += `<circle cx="${lx}" cy="${y + 6}" r="3" fill="${accent}"/>`;
+    svg += `<circle class="motion" cx="${lx}" cy="${y + 6}" r="3" fill="none" stroke="${accent}"><animate attributeName="r" values="3;8;8" keyTimes="0;.6;1" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0;0" keyTimes="0;.6;1" dur="2.4s" repeatCount="indefinite"/></circle>`;
+    dateEnd += 14;
+  }
+  const tl = titleLine(r.title, r.aside, x, y + 33, width, 15.5, 600, t);
+  svg += tl.svg;
+  let cy = y + 33 + tl.h;
+  if (r.context) {
+    cy += 21;
+    svg += `<text x="${x}" y="${cy}" font-family="${SANS}" font-size="${BODY_SIZE}" fill="${t.body}">${esc(r.context)}</text>`;
+  }
+  if (r.metric) {
+    cy += 22;
+    svg += metric(r.metric, x, cy - 4, accent, t);
+    cy += 6;
+  }
+  cy += 26;
+  const gs = groups(r.groups, x, cy, width, t);
+  svg += gs.svg;
+  cy += gs.h;
+  return { svg, h: cy - y, nodeY: y + 6, dateStart: x, dateEnd };
+}
+
+const SECTION_ICONS = {
+  edu: '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+  exp: '<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
+  tools: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+};
+
+function header(key, title, span, x, y, width, color, t) {
+  let svg = `<g transform="translate(${x},${y - 13}) scale(.667)" fill="none" stroke="${color}" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${SECTION_ICONS[key]}</g>`;
+  svg += `<text x="${x + 24}" y="${y}" font-family="${SANS}" font-size="12" font-weight="600" letter-spacing="1.6" fill="${t.ink}">${esc(title.toUpperCase())}</text>`;
+  if (span) svg += `<text x="${x + width}" y="${y}" text-anchor="end" font-family="${MONO}" font-size="11" fill="${t.faint}">${esc(span)}</text>`;
+  svg += `<path d="M${x} ${y + 13}H${x + width}" stroke="${t.line}"/>`;
+  return svg;
+}
+
+function section(sec, x, y, width, t) {
+  const accent = t[sec.key];
+  let svg = header(sec.key, sec.title, sec.span, x, y, width, accent, t);
+  const nodes = [{ y: y - 4, kind: 'section', accent }];
+  let cy = y + 42;
+  sec.orgs.forEach((org, oi) => {
+    if (oi) cy += 22;
+    const ol = titleLine(org.name, org.alt, x, cy + 14, width, 18, 600, t);
+    svg += ol.svg;
+    cy += ol.h;
+    if (org.sub) {
+      svg += `<text x="${x}" y="${cy + 34}" font-family="${SANS}" font-size="13" fill="${t.muted}">${esc(org.sub)}</text>`;
+      cy += 58;
+    } else cy += 38;
+    org.roles.forEach((r, ri) => {
+      if (ri) cy += 30;
+      const out = role(r, x, cy, width, accent, t);
+      svg += out.svg;
+      nodes.push({ y: out.nodeY, kind: 'role', accent, dateStart: out.dateStart, dateEnd: out.dateEnd });
+      cy += out.h;
+    });
+  });
+  return { svg, endY: cy, nodes };
+}
+
+function shared(x, y, width, cols, t) {
+  let svg = header('tools', SHARED.title, '', x, y, width, t.muted, t);
+  const gap = 28;
+  const colW = (width - gap * (cols - 1)) / cols;
+  let cy = y + 42, rowH = 0;
+  SHARED.groups.forEach((g, i) => {
+    const col = i % cols;
+    if (i && col === 0) { cy += rowH + 16; rowH = 0; }
+    const out = group(g, x + col * (colW + gap), cy, colW, t);
+    svg += out.svg;
+    rowH = Math.max(rowH, out.h);
+  });
+  return { svg, endY: cy + rowH };
+}
+
+// Curve sampled as a fine polyline so arc length (used to sync node glows with the pulse) is exact.
+function buildCurve(cx, y0, y1, amp, period) {
+  const pts = [];
+  for (let y = y0; y <= y1; y += 3) {
+    const ease = Math.min(1, (y - y0) / 40);
+    const fade = Math.min(1, (y1 - y) / 40);
+    pts.push([cx + amp * Math.sin(((y - y0) / period) * Math.PI * 2) * ease * fade, y]);
+  }
+  let d = `M${pts[0][0].toFixed(2)} ${pts[0][1]}`;
+  const lens = [0];
+  for (let i = 1; i < pts.length; i++) {
+    d += `L${pts[i][0].toFixed(2)} ${pts[i][1]}`;
+    lens.push(lens[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+  }
+  const total = lens[lens.length - 1];
+  const at = (y) => {
+    const i = Math.max(0, Math.min(pts.length - 1, Math.round((y - y0) / 3)));
+    return { x: pts[i][0], f: lens[i] / total };
+  };
+  return { d, total, at };
+}
+
+function agent(cx, cy, t) {
+  const a = t.exp;
+  const blink = (y) => `<animate attributeName="height" values="6;6;1;6;6" keyTimes="0;.9;.93;.96;1" dur="5s" repeatCount="indefinite"/><animate attributeName="y" values="${y};${y};${y + 2.5};${y};${y}" keyTimes="0;.9;.93;.96;1" dur="5s" repeatCount="indefinite"/>`;
+  return `<g transform="translate(${cx},${cy})">
+<circle class="motion" r="18" fill="none" stroke="${a}" opacity="0"><animate attributeName="r" values="16;26;26" keyTimes="0;.5;1" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".45;0;0" keyTimes="0;.5;1" dur="3.5s" repeatCount="indefinite"/></circle>
+<rect x="-14" y="-11" width="28" height="22" rx="7" fill="${t.node}" stroke="${t.ink}" stroke-width="1.5"/>
+<path d="M0 -11v-4" stroke="${t.ink}" stroke-width="1.5" stroke-linecap="round"/><circle cy="-16.5" r="2" fill="${a}"/>
+<rect x="-7" y="-4" width="3" height="6" rx="1.5" fill="${a}">${blink(-4)}</rect>
+<rect x="4" y="-4" width="3" height="6" rx="1.5" fill="${a}">${blink(-4)}</rect>
+<path d="M-3 5.5h6" stroke="${t.muted}" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M-14 -1h-3M14 -1h3" stroke="${t.ink}" stroke-width="1.5" stroke-linecap="round"/>
+</g>`;
+}
+
+function stream(curve, t, dur) {
+  let svg = `<g class="motion">`;
+  svg += `<path d="${curve.d}" fill="none" stroke="${t.exp}" stroke-opacity=".9" stroke-width="2" stroke-linecap="round" stroke-dasharray="48 ${Math.ceil(curve.total + 120)}" stroke-dashoffset="48"><animate attributeName="stroke-dashoffset" from="48" to="${-Math.ceil(curve.total)}" dur="${dur}s" repeatCount="indefinite"/></path>`;
+  const bits = '1011001110100101';
+  const n = bits.length;
+  for (let i = 0; i < n; i++) {
+    const begin = -((dur / n) * i).toFixed(2);
+    const side = i % 2 ? 5 : -11;
+    const col = i % 3 === 0 ? t.edu : t.exp;
+    svg += `<text x="${side}" y="3" font-family="${MONO}" font-size="9" fill="${col}" opacity="0">${bits[i]}<animateMotion dur="${dur}s" begin="${begin}s" repeatCount="indefinite"><mpath href="#railPath"/></animateMotion><animate attributeName="opacity" values="0;.8;.55;0" keyTimes="0;.06;.75;1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></text>`;
+  }
+  return svg + `</g>`;
+}
+
+const fx = (v) => v.toFixed(3);
+
+// A synapse branch: rail node -> gentle arc -> terminal bouton, a small cleft, then the date.
+// Packets leave the node exactly when the rail pulse reaches it, carry 0/1 bits along the branch,
+// and dissolve at the terminal while the date briefly lights up, as if the bits became the data.
+function synapse(n, x, f, t, dur, id) {
+  const right = n.dateStart > x;
+  const x1 = right ? n.dateStart - 9 : n.dateEnd + 9;
+  const len = Math.abs(x1 - x);
+  const mid = (x + x1) / 2;
+  const d = `M${fx(x)} ${n.y}Q${fx(mid)} ${n.y - Math.min(7, len * 0.06)} ${fx(x1)} ${n.y}`;
+  const tb = Math.min(0.995 - f - 0.1, Math.max(0.5 / dur, len / 300 / dur));
+  const a = f, b = f + tb;
+  let svg = `<path id="${id}" d="${d}" fill="none" stroke="${t.line}" stroke-width="1"/>`;
+  svg += `<circle cx="${fx(x1)}" cy="${n.y}" r="2" fill="${n.accent}" fill-opacity=".55"/>`;
+
+  const hx = (right ? n.dateStart : n.dateStart) - 5;
+  const hw = n.dateEnd - n.dateStart + 10;
+  svg += `<g class="motion">`;
+  svg += `<rect x="${fx(hx)}" y="${n.y - 10}" width="${fx(hw)}" height="20" rx="5" fill="${n.accent}" opacity="0"><animate attributeName="opacity" values="0;0;.16;0;0" keyTimes="0;${fx(b - 0.005)};${fx(b + 0.02)};${fx(Math.min(0.999, b + 0.12))};1" dur="${dur}s" repeatCount="indefinite"/></rect>`;
+  svg += `<path d="${d}" fill="none" stroke="${n.accent}" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="14 ${Math.ceil(len + 40)}" stroke-dashoffset="14" opacity="0"><animate attributeName="stroke-dashoffset" values="14;14;${-Math.ceil(len)};${-Math.ceil(len)}" keyTimes="0;${fx(a)};${fx(b)};1" dur="${dur}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;.9;.9;0;0" keyTimes="0;${fx(a)};${fx(a + 0.005)};${fx(b - 0.005)};${fx(b)};1" dur="${dur}s" repeatCount="indefinite"/></path>`;
+  const bits = ['1', '0', '1', '1'];
+  bits.forEach((bit, k) => {
+    const s = a + k * tb * 0.12;
+    const e = Math.min(0.998, s + tb);
+    const dy = k % 2 ? 9 : -4;
+    svg += `<text x="-3" y="${dy}" font-family="${MONO}" font-size="8.5" fill="${n.accent}" opacity="0">${bit}<animateMotion dur="${dur}s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;${fx(s)};${fx(e)};1"><mpath href="#${id}"/></animateMotion><animate attributeName="opacity" values="0;0;.85;.85;0;0" keyTimes="0;${fx(s)};${fx(s + 0.01)};${fx(e - tb * 0.35)};${fx(e)};1" dur="${dur}s" repeatCount="indefinite"/></text>`;
+  });
+  svg += `<circle cx="${fx(x1)}" cy="${n.y}" r="2" fill="none" stroke="${n.accent}" opacity="0"><animate attributeName="r" values="2;2;7;7" keyTimes="0;${fx(b)};${fx(Math.min(0.999, b + 0.08))};1" dur="${dur}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;.6;0;0" keyTimes="0;${fx(b - 0.002)};${fx(b)};${fx(Math.min(0.999, b + 0.08))};1" dur="${dur}s" repeatCount="indefinite"/></circle>`;
+  return svg + `</g>`;
+}
+
+function nodeMarks(curve, nodes, t, dur) {
+  let svg = '';
+  nodes.forEach((n, i) => {
+    if (n.kind === 'section') return;
+    const { x, f } = curve.at(n.y);
+    const xs = x.toFixed(2);
+    svg += synapse(n, x, f, t, dur, `syn${i}`);
+    const k = [0, Math.max(0.001, f - 0.002), Math.min(0.998, f + 0.03), Math.min(0.999, f + 0.16), 1].map((v) => v.toFixed(3)).join(';');
+    svg += `<circle class="motion" cx="${xs}" cy="${n.y}" r="4" fill="${n.accent}" opacity="0"><animate attributeName="opacity" values="0;0;.3;0;0" keyTimes="${k}" dur="${dur}s" repeatCount="indefinite"/><animate attributeName="r" values="4;4;10;12;4" keyTimes="${k}" dur="${dur}s" repeatCount="indefinite"/></circle>`;
+    svg += `<circle cx="${xs}" cy="${n.y}" r="4" fill="${t.node}" stroke="${n.accent}" stroke-width="1.6"/>`;
+    svg += `<circle cx="${xs}" cy="${n.y}" r="1.4" fill="${n.accent}"/>`;
+  });
+  return svg;
+}
+
+function defs(t, y0, y1) {
+  return `<defs><linearGradient id="railGrad" x1="0" y1="${y0}" x2="0" y2="${y1}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${t.exp}" stop-opacity=".75"/><stop offset=".22" stop-color="${t.line}"/><stop offset=".9" stop-color="${t.line}"/><stop offset="1" stop-color="${t.line}" stop-opacity="0"/></linearGradient></defs>
+<style>@media (prefers-reduced-motion: reduce){.motion{display:none}}</style>`;
+}
+
+
+const DESC = 'Education. University of Zagreb, Faculty of Electrical Engineering and Computing. MSc in Computing, Computer Science track, October 2025 – July 2027 (expected); relevant coursework: Machine Learning, Deep Learning. BSc in Computing, October 2021 – July 2025; bachelor’s thesis: facial expression classification; deep learning: CNN, Keras, TensorFlow. Université de Tours, Polytech Tours: Erasmus+ exchange semester, September 2025 – January 2026; computer vision: instance segmentation, YOLO11, OpenCV; natural language processing: TF-IDF, SVM, BERT, scikit-learn; data and evaluation: dataset preparation, cross-validation, model comparison. Experience. Abysalto: Student AI/ML Engineer, January 2026 – present; production support chatbot and supplier catalog imports; the chatbot handled nearly 30,000 production sessions; agentic AI: LangGraph, ReAct, tool calling, LLMs; document retrieval: RAG, chunking, embeddings, FAISS, pgvector; backend and data: Python, FastAPI, REST APIs, PostgreSQL, Redis, Django; evaluation and tracing: Arize Phoenix, OpenTelemetry, prompt evaluation. AI Engineering Intern, Abysalto AI Academy, July – September 2025; Agent Studio: agent configuration and document search; agent integration: LangGraph, LangChain, RAG, MCP; API development: FastAPI, Pydantic, SQLAlchemy, PostgreSQL, pytest. Shared engineering tools. Delivery and collaboration: Git, Gerrit, Azure DevOps, Jenkins. Runtime and deployment: Docker, OpenShift. Other programming experience: Java, C++.';
+
+const wrapSvg = (W, H, body) => `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="title desc">
+<title id="title">Petar Majić: Education, Experience and Engineering Tools</title>
+<desc id="desc">${esc(DESC)}</desc>
+${body}
+</svg>
+`;
+
+function rail(curve) {
+  return `<path id="railPath" d="${curve.d}" fill="none" stroke="url(#railGrad)" stroke-width="1.4"/>`;
+}
+
+function desktop(t) {
+  const W = 960, colW = 396, L = 24, R = W - 24 - colW, CX = W / 2, top = 40;
+  const edu = section(EDUCATION, L, top, colW, t);
+  const exp = section(EXPERIENCE, R, top, colW, t);
+  const colsEnd = Math.max(edu.endY, exp.endY) + 12;
+  const tools = shared(L, colsEnd + 44, W - 2 * L, 3, t);
+  const H = Math.ceil(tools.endY + 16);
+  const curve = buildCurve(CX, top + 4, colsEnd, 9, 260);
+  const dur = 8;
+  let body = defs(t, top, colsEnd) + rail(curve) + stream(curve, t, dur);
+  body += nodeMarks(curve, [...edu.nodes, ...exp.nodes], t, dur);
+  body += edu.svg + exp.svg + tools.svg + agent(CX, top - 14, t);
+  return wrapSvg(W, H, body);
+}
+
+function mobile(t) {
+  const W = 440, X = 50, colW = W - X - 16, CX = 22, top = 40;
+  const exp = section(EXPERIENCE, X, top, colW, t);
+  const edu = section(EDUCATION, X, exp.endY + 48, colW, t);
+  const colsEnd = edu.endY + 12;
+  const tools = shared(16, colsEnd + 40, W - 32, 1, t);
+  const H = Math.ceil(tools.endY + 16);
+  const curve = buildCurve(CX, top + 4, colsEnd, 5, 280);
+  const dur = 13;
+  let body = defs(t, top, colsEnd) + rail(curve) + stream(curve, t, dur);
+  body += nodeMarks(curve, [...exp.nodes, ...edu.nodes], t, dur);
+  const s = curve.at(edu.nodes[0].y);
+  body += `<rect x="${(s.x - 5).toFixed(2)}" y="${edu.nodes[0].y - 5}" width="10" height="10" rx="2.5" transform="rotate(45 ${s.x.toFixed(2)} ${edu.nodes[0].y})" fill="${t.node}" stroke="${t.edu}" stroke-width="1.6"/>`;
+  body += exp.svg + edu.svg + tools.svg + agent(CX, top - 14, t);
+  return wrapSvg(W, H, body);
+}
+
+const files = {
+  'timeline.svg': desktop(THEMES.light),
+  'timeline-dark.svg': desktop(THEMES.dark),
+  'timeline-mobile.svg': mobile(THEMES.light),
+  'timeline-mobile-dark.svg': mobile(THEMES.dark),
+};
+for (const [name, svg] of Object.entries(files)) {
+  fs.writeFileSync(path.join(OUT, name), svg);
+  console.log(name, svg.length, 'bytes');
+}
