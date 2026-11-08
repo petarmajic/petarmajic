@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="971" viewBox="0 0 360 971" role="img" aria-labelledby="heading details"><title id="heading">Experience and education</title><desc id="details">Jan 2026 to Present. Student AI/ML Engineer, Abysalto. I built tools that let a LangGraph agent check each shipment in an order. In Arize Phoenix, I followed OpenTelemetry traces from the tool result to the reply a shopper received. I built the FastAPI service our team uses to publish support answers. The chatbot retrieves those answers from PostgreSQL with pgvector. Oct 2025 to Jul 2027 (expected). Master of Science in Computing, University of Zagreb · FER. Computer Science track Sep 2025 to Jan 2026. Erasmus+ exchange semester, Polytech Tours · Université de Tours. I fine-tuned YOLO11 to outline individual crystals across 15 classes in microscopy images from CHU Orléans. In separate projects, I compared OpenCV edge detectors and tested a linear SVM and BERT on the same 165 medical notes. Jul 2025 to Sep 2025. AI Engineering Intern, Abysalto AI Academy. I wrote the FastAPI routes for configuring agents. I connected Agent Studio to RAG Studio so a LangGraph agent could search the document collections a user selected. Oct 2021 to Jul 2025. Bachelor of Science in Computing, University of Zagreb · FER. For my thesis, I trained a convolutional neural network in Keras to classify seven facial expressions. It correctly classified 934 of 1,432 FER2013 validation images.</desc>
+<rect width="360" height="971" fill="#0d1117"/>
+<path d="M15 17V789" stroke="#405166" stroke-width="2"/>
+<circle cx="15" cy="17" r="10" fill="#0d1117" stroke="#66d6bf" stroke-width="1.5"/>
+<circle cx="15" cy="17" r="5" fill="#66d6bf"/>
+<circle cx="15" cy="293" r="5" fill="#8ab4fc"/>
+<circle cx="15" cy="405" r="5" fill="#8ab4fc"/>
+<circle cx="15" cy="617" r="5" fill="#66d6bf"/>
+<circle cx="15" cy="789" r="5" fill="#8ab4fc"/>
+<text x="37" y="22" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#66d6bf">Jan 2026 – Present</text>
+<text x="37" y="48" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="700" fill="#e6edf3">Student AI/ML Engineer</text>
+<text x="37" y="69" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#adbac7">Abysalto</text>
+<text x="37" y="92" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">I built tools that let a LangGraph agent</text>
+<text x="37" y="112" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">check each shipment in an order. In Arize</text>
+<text x="37" y="132" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">Phoenix, I followed OpenTelemetry traces</text>
+<text x="37" y="152" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">from the tool result to the reply a shopper</text>
+<text x="37" y="172" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">received.</text>
+<text x="37" y="196" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">I built the FastAPI service our team uses to</text>
+<text x="37" y="216" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">publish support answers. The chatbot</text>
+<text x="37" y="236" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">retrieves those answers from PostgreSQL</text>
+<text x="37" y="256" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">with pgvector.</text>
+<text x="37" y="298" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#8ab4fc">Oct 2025 – Jul 2027 (expected)</text>
+<text x="37" y="324" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="700" fill="#e6edf3">Master of Science in Computing</text>
+<text x="37" y="345" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#adbac7">University of Zagreb · FER</text>
+<text x="37" y="368" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">Computer Science track</text>
+<text x="37" y="410" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#8ab4fc">Sep 2025 – Jan 2026</text>
+<text x="37" y="436" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="700" fill="#e6edf3">Erasmus+ exchange semester</text>
+<text x="37" y="457" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#adbac7">Polytech Tours · Université de Tours</text>
+<text x="37" y="480" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">I fine-tuned YOLO11 to outline individual</text>
+<text x="37" y="500" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">crystals across 15 classes in microscopy</text>
+<text x="37" y="520" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">images from CHU Orléans. In separate</text>
+<text x="37" y="540" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">projects, I compared OpenCV edge</text>
+<text x="37" y="560" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">detectors and tested a linear SVM and BERT</text>
+<text x="37" y="580" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">on the same 165 medical notes.</text>
+<text x="37" y="622" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#66d6bf">Jul 2025 – Sep 2025</text>
+<text x="37" y="648" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="700" fill="#e6edf3">AI Engineering Intern</text>
+<text x="37" y="669" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#adbac7">Abysalto AI Academy</text>
+<text x="37" y="692" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">I wrote the FastAPI routes for configuring</text>
+<text x="37" y="712" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">agents. I connected Agent Studio to RAG</text>
+<text x="37" y="732" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">Studio so a LangGraph agent could search</text>
+<text x="37" y="752" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">the document collections a user selected.</text>
+<text x="37" y="794" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#8ab4fc">Oct 2021 – Jul 2025</text>
+<text x="37" y="820" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="700" fill="#e6edf3">Bachelor of Science in</text>
+<text x="37" y="841" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="700" fill="#e6edf3">Computing</text>
+<text x="37" y="862" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#adbac7">University of Zagreb · FER</text>
+<text x="37" y="885" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">For my thesis, I trained a convolutional</text>
+<text x="37" y="905" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">neural network in Keras to classify seven</text>
+<text x="37" y="925" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">facial expressions. It correctly classified 934</text>
+<text x="37" y="945" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#adbac7">of 1,432 FER2013 validation images.</text>
+</svg>
